@@ -21,116 +21,132 @@
         </ul>
     </nav>
     <main>
-        <section>
-            <form id="quizForm">
-                <h2>1. Care a fost un eveniment semnificativ din perioada interbelică?</h2>
-                <label>
-                    <input type="radio" name="q1" value="1"> Marea Criză Economică din 1929
-                </label><br>
-                <label>
-                    <input type="radio" name="q1" value="2"> Marea Unire din 1918
-                </label><br>
-                <label>
-                    <input type="radio" name="q1" value="3"> Războiul Rece
-                </label><br>
-                
-                <h2>2. Când au obținut femeile din România dreptul de vot?</h2>
-                <label>
-                    <input type="radio" name="q2" value="1"> 1918
-                </label><br>
-                <label>
-                    <input type="radio" name="q2" value="2"> 1938
-                </label><br>
-                <label>
-                    <input type="radio" name="q2" value="3"> 1945
-                </label><br>
+       <div id="nameInputSection">
+    <label for="username">Introdu numele tău:</label>
+    <input type="text" id="username">
+    <button onclick="startQuiz()">Începe quiz-ul</button>
+</div>
 
-                <h2>3. Ce oraș din România a fost numit "Micul Paris" în perioada interbelică?</h2>
-                <label>
-                    <input type="radio" name="q3" value="1"> Cluj-Napoca
-                </label><br>
-                <label>
-                    <input type="radio" name="q3" value="2"> Iași
-                </label><br>
-                <label>
-                    <input type="radio" name="q3" value="3"> București
-                </label><br>
+<!-- Quiz-ul -->
+<section id="quizSection">
+    <form id="quizForm">
+        <div id="questions"></div>
+        <button type="button" onclick="checkAnswers()">Verifică răspunsurile</button>
+    </form>
+    <div id="result"></div>
+</section>
 
-                <h2>4. În ce an au fost înființate primele organizații feministe din România?</h2>
-                <label>
-                    <input type="radio" name="q4" value="1"> 1925
-                </label><br>
-                <label>
-                    <input type="radio" name="q4" value="2"> 1930
-                </label><br>
-                <label>
-                    <input type="radio" name="q4" value="3"> 1935
-                </label><br>
+<!-- Scoruri -->
+<div id="scoreboard">
+    <h2>Clasament participanți</h2>
+    <ul id="scoreList"></ul>
+</div>
 
-                <h2>5. Ce tehnologie a avut un impact semnificativ în viața cotidiană în perioada interbelică?</h2>
-                <label>
-                    <input type="radio" name="q5" value="1"> Televiziunea
-                </label><br>
-                <label>
-                    <input type="radio" name="q5" value="2"> Telefonul mobil
-                </label><br>
-                <label>
-                    <input type="radio" name="q5" value="3"> Radioul
-                </label><br>
+<script>
+    const questions = [
+        { question: "1. Care a fost un eveniment semnificativ din perioada interbelică?", options: ["Marea Criză Economică din 1929", "Marea Unire din 1918", "Războiul Rece"], correct: 0 },
+        { question: "2. Când au obținut femeile din România dreptul de vot?", options: ["1918", "1938", "1945"], correct: 1 },
+        { question: "3. Ce oraș din România a fost numit 'Micul Paris' în perioada interbelică?", options: ["Cluj-Napoca", "Iași", "București"], correct: 2 },
+        { question: "4. În ce an au fost înființate primele organizații feministe din România?", options: ["1925", "1930", "1935"], correct: 0 },
+        { question: "5. Ce tehnologie a avut un impact semnificativ în viața cotidiană în perioada interbelică?", options: ["Televiziunea", "Telefonul mobil", "Radioul"], correct: 2 },
+        { question: "6. Ce scriitor român a fost activ în perioada interbelică?", options: ["Mihai Eminescu", "Mircea Eliade", "Ion Creangă"], correct: 1 },
+        { question: "7. Ce rege a condus România în mare parte din perioada interbelică?", options: ["Carol I", "Ferdinand I", "Carol al II-lea"], correct: 2 },
+        { question: "8. Ce ideologie politică a cunoscut o creștere în perioada interbelică?", options: ["Comunismul", "Fascismul", "Monarhismul"], correct: 1 },
+        { question: "9. Ce organizație politică extremistă a apărut în România interbelică?", options: ["PNL", "Legiunea Arhanghelul Mihail", "PSD"], correct: 1 },
+        { question: "10. Cine a fost fondatorul Gărzii de Fier?", options: ["Ion Antonescu", "Corneliu Zelea Codreanu", "Nicolae Ceaușescu"], correct: 1 },
+        { question: "11. Ce universitate românească a fost importantă în perioada interbelică?", options: ["Universitatea din Oradea", "Universitatea din București", "Universitatea de Vest"], correct: 1 },
+        { question: "12. Ce arhitectură a cunoscut un avânt în perioada interbelică?", options: ["Neoclasică", "Modernistă", "Gotică"], correct: 1 },
+        { question: "13. Ce publicație era populară în perioada interbelică?", options: ["Jurnalul Național", "Viața Românească", "Evenimentul Zilei"], correct: 1 },
+        { question: "14. Care era moneda României în perioada interbelică?", options: ["Leul", "Euro", "Dolarul"], correct: 0 },
+        { question: "15. Ce provincie a revenit României după Primul Război Mondial?", options: ["Basarabia", "Dobrogea", "Bucovina de Sud"], correct: 0 },
+        { question: "16. Ce pact internațional a fost semnat de România în 1920?", options: ["Pactul de la Varșovia", "Tratatul de la Trianon", "Pactul Ribbentrop-Molotov"], correct: 1 },
+        { question: "17. Cine a fost un filosof celebru al României interbelice?", options: ["Emil Cioran", "Lucian Blaga", "Ambii"], correct: 2 },
+        { question: "18. Ce rol a avut Regina Maria în politica externă a României?", options: ["A fost ambasadoare la ONU", "A susținut România la Conferința de Pace de la Paris", "Nu a avut niciun rol"], correct: 1 },
+        { question: "19. Ce partide dominau scena politică interbelică?", options: ["USR și AUR", "PNL și PNT", "PSD și ALDE"], correct: 1 },
+        { question: "20. Ce influență culturală era dominantă în România interbelică?", options: ["Orientală", "Occidentală", "Sovietică"], correct: 1 }
+    ];
 
-                <button type="button" onclick="checkAnswers()">Verifică răspunsurile</button>
-            </form>
+    let participants = [];
 
-            <div id="result"></div>
-        </section>
+    // Încarcă scorurile din localStorage
+    window.onload = function () {
+        const saved = localStorage.getItem("quizScores");
+        if (saved) {
+            participants = JSON.parse(saved);
+            updateScoreboard();
+        }
+    };
+
+    function startQuiz() {
+        const username = document.getElementById("username").value.trim();
+        if (username === "") {
+            alert("Te rog să introduci un nume.");
+            return;
+        }
+        document.getElementById("nameInputSection").style.display = "none";
+        document.getElementById("quizSection").style.display = "block";
+        loadQuestions();
+    }
+
+    function loadQuestions() {
+        const container = document.getElementById("questions");
+        container.innerHTML = ""; // Curăță dacă s-a mai apelat
+        questions.forEach((q, i) => {
+            let html = `<h2>${q.question}</h2>`;
+            q.options.forEach((opt, j) => {
+                html += `<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label><br>`;
+            });
+            container.innerHTML += html;
+        });
+    }
+
+    function checkAnswers() {
+        const username = document.getElementById("username").value.trim();
+        let score = 0;
+        let output = "";
+        questions.forEach((q, i) => {
+            const radios = document.getElementsByName(`q${i}`);
+            let selected = -1;
+            for (let r of radios) {
+                if (r.checked) selected = parseInt(r.value);
+            }
+            if (selected === q.correct) {
+                score++;
+                output += `<p class="correct">${q.question} ✔️</p>`;
+            } else {
+                const correctAnswer = q.options[q.correct];
+                output += `<p class="incorrect">${q.question} ❌<br>Răspuns corect: <strong>${correctAnswer}</strong></p>`;
+            }
+        });
+
+        // Afișează rezultatul
+        document.getElementById("result").innerHTML = `
+            <h2>${username}, ai obținut ${score} din ${questions.length} puncte.</h2>
+            ${output}
+        `;
+
+        // Adaugă scorul și salvează
+        participants.push({ name: username, score: score });
+        localStorage.setItem("quizScores", JSON.stringify(participants));
+        updateScoreboard();
+    }
+
+    function updateScoreboard() {
+        const list = document.getElementById("scoreList");
+        list.innerHTML = "";
+        participants.forEach(p => {
+            const li = document.createElement("li");
+            li.textContent = `${p.name}: ${p.score} puncte`;
+            list.appendChild(li);
+        });
+    }
+</script>
     </main>
 
     <footer>
         <p>&copy; 2025 Perioada Interbelică. Toate drepturile rezervate.</p>
     </footer>
 
-    <script>
-        function checkAnswers() {
-            let correctAnswers = 0;
-            const totalQuestions = 5;
-
-            // Întrebarea 1
-            if (document.querySelector('input[name="q1"]:checked') && document.querySelector('input[name="q1"]:checked').value === "1") {
-                correctAnswers++;
-            }
-
-            // Întrebarea 2
-            if (document.querySelector('input[name="q2"]:checked') && document.querySelector('input[name="q2"]:checked').value === "2") {
-                correctAnswers++;
-            }
-
-            // Întrebarea 3
-            if (document.querySelector('input[name="q3"]:checked') && document.querySelector('input[name="q3"]:checked').value === "3") {
-                correctAnswers++;
-            }
-
-            // Întrebarea 4
-            if (document.querySelector('input[name="q4"]:checked') && document.querySelector('input[name="q4"]:checked').value === "2") {
-                correctAnswers++;
-            }
-
-            // Întrebarea 5
-            if (document.querySelector('input[name="q5"]:checked') && document.querySelector('input[name="q5"]:checked').value === "3") {
-                correctAnswers++;
-            }
-
-            // Feedback
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = `Ai răspuns corect la ${correctAnswers} din ${totalQuestions} întrebări.`;
-
-            if (correctAnswers === totalQuestions) {
-                resultDiv.innerHTML += " Felicitări! Ai un scor perfect!";
-            } else if (correctAnswers > 2) {
-                resultDiv.innerHTML += " Bună treabă! Continuă să înveți!";
-            } else {
-                resultDiv.innerHTML += " Încă mai sunt lucruri de învățat. Încearcă din nou!";
-            }
-        }
-    </script>
+   
 </body>
 </html>
